@@ -1,7 +1,7 @@
 #Shell Script for Prepping and Running Sequence Data Assembly using Abyss 2.3.10
 #Made by Fletcher Falk Feb.17/25
 #Script should work in WSL using conda to install all packages
-#Requires trimmomatic, fastqc, abyss, and all their requirements
+#Requires trimmomatic, fastqc, abyss, and all dependencies
 #READ:
 #Ensure all sequence data is located inside a folder named: sequence-data
 #Ensure this script is given permissions and is located outside of the sequence-data folder
