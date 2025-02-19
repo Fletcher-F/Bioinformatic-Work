@@ -14,7 +14,7 @@ FILENAME="Roseo"
 
 #Initial Quality Checking
 mkdir ${DATA}/Initial-Quality
-fastqc ${DATA}/*.fastq.gz -o ${DATA}/Initial-Quality
+fastqc -t 16 ${DATA}/*.fastq.gz -o ${DATA}/Initial-Quality
 
 #Trimming
 total=$(ls ${DATA}/*.fastq.gz | wc -l)
