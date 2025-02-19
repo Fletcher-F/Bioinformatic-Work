@@ -41,5 +41,6 @@ fastqc ${DATA}/Paired-Filtered-Data/*fastq.gz -o ${DATA}/Final-Quality
 #ADD IN K-mer Optimization chose 58 for now based on github manual
 
 #Final Run
-abyss-pe k=58 kc=2 B=2G j=16 in="${FILTEREDDATA}/Filtered${FILENAME}1pairedR1.fastq.gz ${FILTEREDDATA}/Filtered${FILENAME}1pairedR2.fastq.gz" name=Roseo-Assembly 
+#2x150bp reads and 40x coverage, the right k value is often around 70 to 90.
+abyss-pe k=80 kc=2 B=2G j=16 in="${FILTEREDDATA}/Filtered${FILENAME}1pairedR1.fastq.gz ${FILTEREDDATA}/Filtered${FILENAME}1pairedR2.fastq.gz" name=Roseo-Assembly 
 echo "Done Program"
