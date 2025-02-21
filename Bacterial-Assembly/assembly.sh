@@ -26,7 +26,7 @@ mkdir ${DATA}/Paired-Filtered-Data
 mkdir ${DATA}/Unpaired-Data
 while [ $counter -lt $runs ]
 do
-	trimmomatic PE -threads 16 -phred33 ${DATA}/${FILENAME}${counter}R1.fastq.gz ${DATA}/${FILENAME}${counter}R2.fastq.gz ${DATA}/Paired-Filtered-Data/Filtered${FILENAME}${counter}pairedR1.fastq.gz ${DATA}/Unpaired-Data/Filtered${FILENAME}${counter}unpairedR1.fastq.gz ${DATA}/Paired-Filtered-Data/Filtered${FILENAME}${counter}pairedR2.fastq.gz ${DATA}/Unpaired-Data/Filtered${FILENAME}${counter}unpairedR2.fastq.gz ILLUMINACLIP:./adapters/TruSeq2-PE.fa:2:30:10 SLIDINGWINDOW:4:20 MINLEN:25 LEADING:20 TRAILING:20
+	trimmomatic PE -threads 12 -phred33 ${DATA}/${FILENAME}${counter}R1.fastq.gz ${DATA}/${FILENAME}${counter}R2.fastq.gz ${DATA}/Paired-Filtered-Data/Filtered${FILENAME}${counter}pairedR1.fastq.gz ${DATA}/Unpaired-Data/Filtered${FILENAME}${counter}unpairedR1.fastq.gz ${DATA}/Paired-Filtered-Data/Filtered${FILENAME}${counter}pairedR2.fastq.gz ${DATA}/Unpaired-Data/Filtered${FILENAME}${counter}unpairedR2.fastq.gz ILLUMINACLIP:./adapters/TruSeq3-PE-2.fa:2:30:10 SLIDINGWINDOW:4:20 MINLEN:25 LEADING:20 TRAILING:20
 	((counter++))
 done
 counter=1
@@ -38,9 +38,11 @@ fastqc ${DATA}/Paired-Filtered-Data/*fastq.gz -o ${DATA}/Final-Quality
 
 #Abyss Assembly of Reads
 #Change B based on size of genome 2G for ~101Mbp and 50G for ~3.1Gbp
-#ADD IN K-mer Optimization chose 58 for now based on github manual
-
-#Final Run
 #2x150bp reads and 40x coverage, the right k value is often around 70 to 90.
-abyss-pe k=80 kc=2 B=2G j=16 in="${FILTEREDDATA}/Filtered${FILENAME}1pairedR1.fastq.gz ${FILTEREDDATA}/Filtered${FILENAME}1pairedR2.fastq.gz" name=Roseo-Assembly 
+for kc in 2 3; do
+	for k in `seq 50 8 90`; do
+		mkdir k${k}-kc${kc}
+		abyss-pe -C k${k}-kc${kc} name=Roseo B=2G j=12 k=$k kc=$kc in=".${FILTEREDDATA}/Filtered${FILENAME}1pairedR1.fastq.gz .${FILTEREDDATA}/Filtered${FILENAME}1pairedR2.fastq.gz"
+	done
+done
 echo "Done Program"
